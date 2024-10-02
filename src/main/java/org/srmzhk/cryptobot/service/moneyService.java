@@ -9,7 +9,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
-public class CurrencyService {
+public class moneyService {
 
     public static String getCurrencyRate(String message, CurrencyModel model) throws IOException, java.text.ParseException {
         URL url = new URL("https://www.nbrb.by/api/exrates/rates/" + message + "?parammode=2");

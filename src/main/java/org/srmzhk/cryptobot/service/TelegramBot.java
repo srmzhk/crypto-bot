@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Component;
 import org.srmzhk.cryptobot.config.BotConfig;
+import org.srmzhk.cryptobot.model.CryptoCurrency;
 import org.srmzhk.cryptobot.model.CurrencyModel;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -28,8 +29,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        CurrencyModel currencyModel = new CurrencyModel();
-        String currency = "";
+        String answer = "";
 
         if(update.hasMessage() && update.getMessage().hasText()){
             String messageText = update.getMessage().getText();
@@ -37,31 +37,27 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             switch (messageText){
                 case "/start":
-                    startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
+                    startCommandReceived(chatId);
                     break;
                 default:
                     try {
-                        currency = CurrencyService.getCurrencyRate(messageText, currencyModel);
-
+                        answer = CryptoCurrencyService.getCryptoCurrenciesPrice();
                     } catch (IOException e) {
                         sendMessage(chatId, "We have not found such a currency." + "\n" +
                                 "Enter the currency whose official exchange rate" + "\n" +
                                 "you want to know in relation to BYN." + "\n" +
                                 "For example: USD");
-                    } catch (ParseException | java.text.ParseException e) {
+                    } catch (ParseException e) {
                         throw new RuntimeException("Unable to parse date");
                     }
-                    sendMessage(chatId, currency);
+                    sendMessage(chatId, answer);
             }
         }
 
     }
 
-    private void startCommandReceived(Long chatId, String name) {
-        String answer = "Hi, " + name + ", nice to meet you!" + "\n" +
-                "Enter the currency whose official exchange rate" + "\n" +
-                "you want to know in relation to BYN." + "\n" +
-                "For example: USD";
+    private void startCommandReceived(Long chatId) {
+        String answer = "Hello!";
         sendMessage(chatId, answer);
     }
 
