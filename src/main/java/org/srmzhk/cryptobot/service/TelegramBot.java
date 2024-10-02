@@ -48,7 +48,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                                 "you want to know in relation to BYN." + "\n" +
                                 "For example: USD");
                     } catch (ParseException e) {
-                        throw new RuntimeException("Unable to parse date");
+                        throw new RuntimeException("Unable to parse date ");
                     }
                     sendMessage(chatId, answer);
             }
